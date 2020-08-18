@@ -1,0 +1,143 @@
+= TimeCursor
+
+TimeCursor は crontab のような書式で与えた規則で, 次または前の日時を得るためのライブラリ.
+
+== 導入
+
+アプリの Gemfile にこの行を追加
+
+[source,ruby]
+----
+gem 'time_cursor'
+----
+
+それから実行
+
+    $ bundle install
+
+または次のように手動で導入
+
+    $ gem install time_cursor
+    or
+    $ gem install -l time_cursor-x.x.x.gem
+
+== 使い方
+
+=== マッチャを初期化
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( at: '2015-02-26 01:23' )
+time_cursor  =  TimeCursor.new( year: 2015, month: 2, day: 26, hour: 1, min: 23 )
+
+time_cursor  =  TimeCursor.new( cron: '0  9,17  *  *  mon-fri' )
+time_cursor  =  TimeCursor.new( wday: 'mon-fri', hour: [9,17] )
+
+time_cursor  =  TimeCursor.new( cron: '0  12  1-7  *  sun' )
+time_cursor  =  TimeCursor.new( day: 1..7, wday: 'sun', hour: 12 )
+
+time_cursor  =  TimeCursor.new( sec: '*/10' )
+----
+
+=== 次の日時を得る
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( cron: '* * * * *' )             = => =<TimeCursor::Matcher>
+time  =  time_cursor.next( '2015-02-26 01:23' )                 = => 2015-02-26 01:24:00
+time  =  time_cursor.next( time )                               = => 2015-02-26 01:25:00
+----
+
+=== 前の日時を得る
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( hour: '*/3' )                   = => =<TimeCursor::Matcher>
+time  =  time_cursor.prev( '2015-02-26 01:23' )                 = => 2015-02-26 00:00:00
+time  =  time_cursor.prev( time )                               = => 2015-02-25 21:00:00
+----
+
+=== マッチするか調べる
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( day: 26, hour: 12 )             = => =<TimeCursor::Matcher>
+time  =  time_cursor.match( '2015-02-26 12:00' )                = => 2015-02-26 12:00:00
+time  =  time_cursor.match( '2015-02-26 00:00' )                = => nil
+----
+
+== リファレンス
+
+=== 条件を指定して、新たな TimeCursor を作成する.
+
+[source,ruby]
+----
+TimeCursor.new( at: nil, cron: nil, year: nil, month: nil, day: nil, wday: nil, hour: nil, min: nil, sec: 0, msec: nil )
+----
+
+* Result:
+  ** TimeCursor::Matcher オブジェクト.
+
+* Parameter:
+  ** at:  日時. Time または String オブジェクト. (default: nil)
+  ** cron:  分、時、日、月、曜パターンのセット. (default: nil)
+  ** year:  年. 範囲制限なしは拒否される. (default: nil)
+  ** month:  月. 1..12, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec. (default: nil)
+  ** day:  日. 1..31. (default: nil)
+  ** wday:  曜. 0..7, sun, mon, tue, wed, thr, fri, sat. (default: nil)
+  ** hour:  時. 0..23. (default: nil)
+  ** min:  分. 0..59. (default: nil)
+  ** sec:  秒. 0..59. (default: 0)
+  ** msec:  ミリ秒. 0..999. (default: nil), ミリ秒が指定されたとき, 他のパラメータは無視される.
+    詳細では, ワイルドカードとして "*" を使用できる.
+
+=== 次の日時を得る.
+
+[source,ruby]
+----
+TimeCursor::Matcher#next( time = Time.now )
+----
+
+* Result:
+  ** 次の Time オブジェクト または nil.
+
+* Parameter:
+  ** time:  基準日時. Time または String オブジェクト. (default: Time.now)
+
+=== 前の日時を得る.
+
+[source,ruby]
+----
+TimeCursor::Matcher#prev( time = Time.now )
+----
+
+* Result:
+  ** 前の Time オブジェクト または nil.
+
+* Parameter:
+  ** time:  基準日時. Time または String オブジェクト. (default: Time.now)
+
+=== 日時が条件に適合するか調べる.
+
+[source,ruby]
+----
+TimeCursor::Matcher#match( time )
+----
+
+* Result:
+  ** Time object or nil.
+
+* Parameter:
+  ** time:  適合検査のための Time または String オブジェクト.
+
+== 注意
+
+地域時刻で計算しているため、夏時間の切り替わりにおいて期待しない挙動となる.
+
+== 貢献
+
+不具合報告とプルリクエストは GitHub https://github.com/arimay/time_cursor まで. 
+
+== ライセンス
+
+この Gem は、 http://opensource.org/licenses/MIT[MITライセンス] の条件に基づいてオープンソースとして入手できる.

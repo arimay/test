@@ -1,0 +1,143 @@
+= TimeCursor
+
+TimeCursor is a library to get the next or previous date time along the rules that are given in a crontab-like format.
+
+== Installation
+
+Add this line to your application's Gemfile:
+
+[source,ruby]
+----
+gem 'time_cursor'
+----
+
+And then execute:
+
+    $ bundle install
+
+Or install it yourself as:
+
+    $ gem install time_cursor
+    or
+    $ gem install -l time_cursor-x.x.x.gem
+
+== Usage
+
+=== Initialize matcher
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( at: '2015-02-26 01:23' )
+time_cursor  =  TimeCursor.new( year: 2015, month: 2, day: 26, hour: 1, min: 23 )
+
+time_cursor  =  TimeCursor.new( cron: '0  9,17  *  *  mon-fri' )
+time_cursor  =  TimeCursor.new( wday: 'mon-fri', hour: [9,17] )
+
+time_cursor  =  TimeCursor.new( cron: '0  12  1-7  *  sun' )
+time_cursor  =  TimeCursor.new( day: 1..7, wday: 'sun', hour: 12 )
+
+time_cursor  =  TimeCursor.new( sec: '*/10' )
+----
+
+=== Get next time
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( cron: '* * * * *' )             = => =<TimeCursor::Matcher>
+time  =  time_cursor.next( '2015-02-26 01:23' )                 = => 2015-02-26 01:24:00
+time  =  time_cursor.next( time )                               = => 2015-02-26 01:25:00
+----
+
+=== Get previous time
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( hour: '*/3' )                   = => =<TimeCursor::Matcher>
+time  =  time_cursor.prev( '2015-02-26 01:23' )                 = => 2015-02-26 00:00:00
+time  =  time_cursor.prev( time )                               = => 2015-02-25 21:00:00
+----
+
+=== Check to match
+
+[source,ruby]
+----
+time_cursor  =  TimeCursor.new( day: 26, hour: 12 )             = => =<TimeCursor::Matcher>
+time  =  time_cursor.match( '2015-02-26 12:00' )                = => 2015-02-26 12:00:00
+time  =  time_cursor.match( '2015-02-26 00:00' )                = => nil
+----
+
+== Reference
+
+=== Create a new TimeCursor with conditions.
+
+[source,ruby]
+----
+TimeCursor.new( at: nil, cron: nil, year: nil, month: nil, day: nil, wday: nil, hour: nil, min: nil, sec: 0, msec: nil )
+----
+
+* Result:
+  ** TimeCursor::Matcher object.
+
+* Parameter:
+  ** at:  time. Time or String object. (default: nil)
+  ** cron:  set of min, hour, day, month, wday pattern. (default: nil)
+  ** year:  year. unlimited range is denied. (default: nil)
+  ** month:  month. 1..12, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec. (default: nil)
+  ** day:  day of month. 1..31. (default: nil)
+  ** wday:  day of week. 0..7, sun, mon, tue, wed, thr, fri, sat. (default: nil)
+  ** hour:  minute. 0..23. (default: nil)
+  ** min:  minute. 0..59. (default: nil)
+  ** sec:  second. 0..59. (default: 0)
+  ** msec:  millisecond. 0..999. (default: nil), If msec is assigned, then other parameters are ignored.
+    In detail, it can use "*" as wildcard.
+
+=== Get next time
+
+[source,ruby]
+----
+TimeCursor::Matcher#next( time = Time.now )
+----
+
+* Result:
+  ** Next Time object or nil.
+
+* Parameter:
+  ** time:  base time. Time or String object. (default: Time.now)
+
+=== Get previous time
+
+[source,ruby]
+----
+TimeCursor::Matcher#prev( time = Time.now )
+----
+
+* Result:
+  ** Previous Time object or nil.
+
+* Parameter:
+  ** time:  base time. Time or String object. (default: Time.now)
+
+=== Check to match
+
+[source,ruby]
+----
+TimeCursor::Matcher#match( time )
+----
+
+* Result:
+  ** Time object or nil.
+
+* Parameter:
+  ** time:  Time or String object for matching.
+
+== Caution
+
+Because it is calculated in local time, it does not work as expected when switching to daylight saving time.
+
+== Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/arimay/time_cursor. 
+
+== License
+
+The gem is available as open source under the terms of the http://opensource.org/licenses/MIT[MIT License].
