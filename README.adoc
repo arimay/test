@@ -2,6 +2,14 @@
 
 TimeCursor is a library to get the next or previous date time along the rules that are given in a crontab-like format.
 
+== Features
+
+* Calculate the next/previous datetime from the conditions.
+* The condition is specified by a format such as crontab or by keyword argument.
+* When next/prev is called with the specified time as an argument, 
+  the closest time that meets the conditions is obtained.
+* It can be used to get the event datetime in the scheduler.
+
 == Installation
 
 Add this line to your application's Gemfile:
@@ -141,3 +149,5 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/arimay
 == License
 
 The gem is available as open source under the terms of the http://opensource.org/licenses/MIT[MIT License].
+
+Copyright (c) ARIMA Yasuhiro <arima.yasuhiro@gmail.com>

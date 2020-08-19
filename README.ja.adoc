@@ -2,6 +2,13 @@
 
 TimeCursor は crontab のような書式で与えた規則で, 次または前の日時を得るためのライブラリ.
 
+== 特徴
+
+* 条件から次回/前回の日時を算出する.
+* 条件は crontab のような書式や、キーワード引数で指定する.
+* 指定時刻を引数に next/prev を呼ぶことで条件に該当する最も近い時刻を得る.
+* スケジューラにおいてイベント日時を決定するために利用できる.
+
 == 導入
 
 アプリの Gemfile にこの行を追加
@@ -141,3 +148,5 @@ TimeCursor::Matcher#match( time )
 == ライセンス
 
 この Gem は、 http://opensource.org/licenses/MIT[MITライセンス] の条件に基づいてオープンソースとして入手できる.
+
+Copyright (c) ARIMA Yasuhiro <arima.yasuhiro@gmail.com>
