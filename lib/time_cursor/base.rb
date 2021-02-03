@@ -57,9 +57,7 @@ module TimeCursor
     end
 
     def cron( patterns )
-      case  patterns
-      when  String
-      else
+      unless  patterns.is_a? String
         raise  ArgumentError, "invalid class : '#{patterns}'"
       end
       a  =  patterns.split("\s")

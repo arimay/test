@@ -40,7 +40,7 @@ module TimeCursor
         @mins     =  Elements.new
         @secs     =  Elements.new
         @usecs    =  Elements.build( msec,   0..999 )
-        @usecs.each_with_index do |item, ndx|
+        @usecs.each_with_index do |_item, ndx|
           @usecs[ndx]  *= 1000
         end
 
@@ -53,6 +53,7 @@ module TimeCursor
     def next( time = Time.now )
       case  time
       when  Time
+        time
       when  String
         time  =  Time.parse( time )
       else
@@ -64,6 +65,7 @@ module TimeCursor
     def prev( time = Time.now )
       case  time
       when  Time
+        time
       when  String
         time  =  Time.parse( time )
       else
@@ -75,6 +77,7 @@ module TimeCursor
     def match( time = Time.now )
       case  time
       when  Time
+        time
       when  String
         time  =  Time.parse( time )
       else
@@ -158,12 +161,12 @@ module TimeCursor
 
     def next_for_sec( time )
       sec  =  @secs.right( time.sec ) || @secs.first
-      time  =  forward_to_sec( time, sec )
+      forward_to_sec( time, sec )
     end
 
     def next_for_usec( time )
       usec  =  @usecs.right( time.usec ) || @usecs.first
-      time  =  forward_to_usec( time, usec )
+      forward_to_usec( time, usec )
     end
 
     def prev_for_date( time )
@@ -229,12 +232,12 @@ module TimeCursor
 
     def prev_for_sec( time )
       sec  =  @secs.left( time.sec ) || @secs.last
-      time  =  back_to_sec( time, sec )
+      back_to_sec( time, sec )
     end
 
     def prev_for_usec( time )
       usec  =  @usecs.left( time.usec ) || @usecs.last
-      time  =  back_to_usec( time, usec )
+      back_to_usec( time, usec )
     end
 
     def forward_to_year( time, year )

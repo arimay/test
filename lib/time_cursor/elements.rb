@@ -35,9 +35,9 @@ module TimeCursor
       when  String
         factors  =  DATE_ALIAS.inject( target.downcase ) do |s, (k, v)| s.gsub( k, v ) end
         items  =  factors.split(',').map do |factor|
-          if  m = RE_ALL.match( factor )
+          if ( m = RE_ALL.match( factor ) )
             []
-          elsif  m = RE_WILD.match( factor )
+          elsif ( m = RE_WILD.match( factor ) )
             if  range.nil?
               raise  ArgumentError, "disallow wildcard without range : '#{target}'"
             end
@@ -45,7 +45,7 @@ module TimeCursor
             to    =  range.last
             step  =  ( m[2] || 1 ).to_i
             expand( from, to, step, range )
-          elsif  m = RE_LIST.match( factor )
+          elsif ( m = RE_LIST.match( factor ) )
             from  =  ( m[1] ).to_i
             to    =  ( m[3] || m[1] ).to_i
             step  =  ( m[5] || 1 ).to_i

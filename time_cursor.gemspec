@@ -10,10 +10,12 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{ Get the datetime for event schedule. }
   spec.description   = %q{ Get the next or previous datetime along the rules that are given in a crontab-like format or other options. }
-  spec.homepage      = "https://github.com/arimay/time_cursor/"
+  spec.homepage      = "https://github.com/arimay/time_cursor"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  end
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
